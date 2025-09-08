@@ -1,0 +1,1 @@
+# jfrog-mcp-server
