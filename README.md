@@ -48,6 +48,6 @@ The following example shows MCP Server definition in Cursor:
   }  
 }
 ```
-3\. Save the configuration file.  
-4\. Restart or refresh your MCP client. An OAuth window opens in your browser.   
-5\. Follow the prompts to authorize your MCP client to access the JFrog MCP Server.
+1\. Save the configuration file.  
+2\. Restart or refresh your MCP client. An OAuth window opens in your browser.   
+3\. Follow the prompts to authorize your MCP client to access the JFrog MCP Server.
