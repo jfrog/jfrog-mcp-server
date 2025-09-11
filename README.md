@@ -26,8 +26,12 @@ You connect to the JFrog MCP server using OAuth for authentication. This elimina
 ## Set up JFrog MCP Server
 
 The JFrog MCP Server is available to JFrog users with a Cloud (SaaS) subscription.  
-An Admin user must [enable the JFrog MCP Server](https://jfrog.com/help/r/jfrog-integrations-documentation/enable-the-jfrog-mcp-server) on a JPD in the subscription.  
-You can then [add the JFrog MCP Server to an MCP client](https://jfrog.com/help/r/jfrog-integrations-documentation/add-the-jfrog-mcp-server-to-an-mcp-client)   
+1\.An Admin user must [enable the JFrog MCP Server](https://jfrog.com/help/r/jfrog-integrations-documentation/enable-the-jfrog-mcp-server) on a JPD in the subscription.  
+2\.You can then [add the JFrog MCP Server to an MCP client](https://jfrog.com/help/r/jfrog-integrations-documentation/add-the-jfrog-mcp-server-to-an-mcp-client)   
+3\. Save the configuration file.  
+4\. Restart or refresh your MCP client. An OAuth window opens in your browser.   
+5\. Follow the prompts to authorize your MCP client to access the JFrog MCP Server.
+
 The following example shows MCP Server definition in Visual Studio Code:  
 ```json  
 {
@@ -48,6 +52,3 @@ The following example shows MCP Server definition in Cursor:
   }  
 }
 ```
-1\. Save the configuration file.  
-2\. Restart or refresh your MCP client. An OAuth window opens in your browser.   
-3\. Follow the prompts to authorize your MCP client to access the JFrog MCP Server.
