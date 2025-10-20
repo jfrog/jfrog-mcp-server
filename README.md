@@ -1,54 +1,138 @@
-![MCP Client](https://avatars.githubusercontent.com/u/499942?s=200&v=4) 
+![JFrog MCP Server](https://avatars.githubusercontent.com/u/499942?s=200&v=4) 
 
-# JFrog Remote MCP Server
+# JFrog MCP Server
 
-The Model Context Protocol (MCP) connects AI systems with external tools, data, and services using a standardized, lightweight interface.  
-**JFrog MCP Server empowers developers, bringing the advanced capabilities of the JFrog platform to the development environment.** JFrog  MCP Server integrates in IDEs and coding assistants such as Copilot or Cursor to respond to natural-language AI queries with rich, actionable information from the JFrog platform.
+A Model Context Protocol (MCP) server that brings the power of the JFrog platform directly to your development environment through AI-powered interactions.
 
-Among the capabilities you can access with direct, friendly AI interactions:
+## Overview
 
-* Resource Management: Create and view projects, repositories, and other JFrog components.  
-* Artifact Search: Execute powerful AQL queries to search for artifacts used within your organization.  
-* Catalog and Curation: Access package information, versions, vulnerabilities, and check curation status  
-* Security Monitoring: generate real-time DevSecOps reports on critical CVEs, severity and applicability of vulnerabilities.
+The Model Context Protocol (MCP) enables AI systems to connect with external tools, data, and services using a standardized, lightweight interface. The **JFrog MCP Server** extends this capability by integrating JFrog platform functionality into IDEs and AI coding assistants like GitHub Copilot and Cursor.
 
-**Use these resources and real-time information for various use cases. For example:**
+With JFrog MCP Server, you can interact with your JFrog platform using natural language queries, getting real-time, actionable information without leaving your development environment.
 
-* **Ensure that only approved packages are used by developers during coding**  
-* **Query JFrog Catalog about OSS package versions, changes in reported vulnerabilities, and license requirements**  
-* **Track and manage JFrog Projects and artifacts**
+## Key Capabilities
 
-**And much more.**
+Transform your development workflow with these AI-powered JFrog integrations:
 
-**Remote Server Implementation**: The JFrog MCP Server is maintained on the JFrog Cloud, and the tools it provides to the client are constantly updated \- you automatically get new features and improvements as they are released.   
-You connect to the JFrog MCP server using OAuth for authentication. This eliminates the need to manage API keys, and no installation or upgrade is required after you enable the implementation.
+### 🏗️ Resource Management
+- Create and manage JFrog projects and repositories
+- View and configure platform components
+- Access organizational resources through natural language queries
 
-## Set up JFrog MCP Server
+### 🔍 Artifact Search & Discovery  
+- Execute powerful AQL (Artifact Query Language) searches
+- Find artifacts across your organization's repositories
+- Discover dependencies and their relationships
 
-The JFrog MCP Server is available to JFrog users with a Cloud (SaaS) subscription.  
-1\. An Admin user must [enable the JFrog MCP Server](https://jfrog.com/help/r/jfrog-integrations-documentation/enable-the-jfrog-mcp-server) on a JPD in the subscription.  
-2\. You can then [add the JFrog MCP Server to an MCP client](https://jfrog.com/help/r/jfrog-integrations-documentation/add-the-jfrog-mcp-server-to-an-mcp-client)   
-3\. Save the configuration file.  
-4\. Restart or refresh your MCP client. An OAuth window opens in your browser.   
-5\. Follow the prompts to authorize your MCP client to access the JFrog MCP Server.
+### 📦 Package Catalog & Curation
+- Access comprehensive package information and version history
+- Check vulnerability status and security ratings
+- Verify package curation and approval status
+- Review license requirements and compliance
 
-The following example shows MCP Server definition in Visual Studio Code:  
-```json  
+### 🛡️ Security & Compliance Monitoring
+- Generate real-time DevSecOps security reports
+- Monitor critical CVEs and vulnerability severity levels
+- Assess vulnerability applicability to your specific environment
+- Track security posture across your artifact ecosystem
+
+## Real-World Use Cases
+
+Leverage JFrog MCP Server for these common development scenarios:
+
+### 🚀 **Secure Development Workflow**
+*"Show me all packages in my project with high-severity vulnerabilities"*
+- Quickly identify security risks during development
+- Get instant remediation recommendations
+- Ensure compliance with security policies
+
+### ✅ **Package Approval & Governance**  
+*"Is the latest version of React approved for use in our organization?"*
+- Verify package curation status before adding dependencies
+- Check organizational approval policies
+- Access license compliance information
+
+### 📊 **Project & Artifact Management**
+*"Create a new repository for my microservice and show me the deployment artifacts from last week"*
+- Streamline project setup and configuration
+- Track artifact lifecycle and deployment history
+- Manage repository permissions and settings
+
+### 🔄 **Dependency Analysis**
+*"Find all projects using vulnerable versions of log4j and show me the upgrade path"*
+- Identify affected projects across your organization
+- Plan coordinated security updates
+- Track dependency relationships and impact
+
+## Remote Server Architecture
+
+The JFrog MCP Server operates as a cloud-hosted service with several key advantages:
+
+- **🔄 Always Up-to-Date**: Automatically receive new features and improvements without manual updates
+- **🔐 Secure Authentication**: OAuth-based connection eliminates API key management  
+- **☁️ Zero Installation**: No local setup or maintenance required
+- **⚡ High Performance**: Cloud-optimized for fast response times
+
+You connect to the JFrog MCP Server using OAuth authentication, providing secure access to your JFrog platform while maintaining enterprise security standards.
+
+## Getting Started
+
+### Prerequisites
+- JFrog Cloud (SaaS) subscription
+- Admin access to enable the MCP Server
+- Compatible MCP client (VS Code, Cursor, or other MCP-enabled IDE)
+
+### Setup Process
+
+**Step 1: Enable JFrog MCP Server**  
+An Admin user must [enable the JFrog MCP Server](https://jfrog.com/help/r/jfrog-integrations-documentation/enable-the-jfrog-mcp-server) on your JFrog Platform Deployment (JPD).
+
+**Step 2: Configure Your MCP Client**  
+[Add the JFrog MCP Server to your MCP client](https://jfrog.com/help/r/jfrog-integrations-documentation/add-the-jfrog-mcp-server-to-an-mcp-client) using the configuration examples below.
+
+**Step 3: Save Configuration**  
+Save the configuration file in your MCP client's settings.
+
+**Step 4: Authenticate**  
+Restart or refresh your MCP client. An OAuth window will open in your browser to authorize the connection.
+
+**Step 5: Start Using**  
+Once authenticated, you can begin interacting with your JFrog platform through natural language queries in your IDE.
+
+### Configuration Examples
+
+#### Visual Studio Code
+```json
 {
-    "mcp":  
-        "servers": {  
-            "jfrog":   
-                "url":"https://<​​JFROG_PLATFORM_URL​​>/mcp" 
-            } 
-        }
-```  
-The following example shows MCP Server definition in Cursor:  
-```json  
-{  
-  "mcpServers": {  
-    "jfrog": {  
-      "url":"https://<​​JFROG_PLATFORM_URL​​>/mcp"
-    }  
-  }  
+  "mcp": {
+    "servers": {
+      "jfrog": {
+        "url": "https://<JFROG_PLATFORM_URL>/mcp"
+      }
+    }
+  }
 }
 ```
+
+#### Cursor
+```json
+{
+  "mcpServers": {
+    "jfrog": {
+      "url": "https://<JFROG_PLATFORM_URL>/mcp"
+    }
+  }
+}
+```
+
+> **Note**: Replace `<JFROG_PLATFORM_URL>` with your actual JFrog platform URL (e.g., `mycompany.jfrog.io`)
+
+## Next Steps
+
+Once configured, try these example queries in your AI assistant:
+- *"Show me the security status of packages in my current project"*
+- *"Create a new Maven repository called 'my-app-releases'"*
+- *"Find all Docker images tagged with 'latest' in the last 30 days"*
+- *"What are the license requirements for the packages I'm using?"*
+
+For more detailed information and advanced usage, visit the [JFrog MCP Server documentation](https://jfrog.com/help/r/jfrog-integrations-documentation).
