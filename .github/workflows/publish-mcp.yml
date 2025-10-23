@@ -1,0 +1,90 @@
+name: Publish MCP Server to Registry
+
+on:
+  # Triggers the workflow on a new release creation.
+  release:
+    types: [published]
+  # Allows manual runs via the GitHub Actions UI.
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      # Required for OIDC authentication by mcp-publisher
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get Release Tag Version
+        id: get_version
+        run: |
+          # The MCP registry expects the version in server.json to match the release tag.
+          # We use the tag name (e.g., v1.2.3) and strip the 'v' prefix (e.g., 1.2.3)
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            VERSION_TAG="${{ github.event.release.tag_name }}"
+            VERSION="${VERSION_TAG#v}"
+            echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            # For manual runs, use current version from server.json
+            VERSION=$(python3 -c "import json; print(json.load(open('server.json'))['version'])")
+            echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+            echo "Using current server.json version: $VERSION"
+          fi
+
+      - name: Update server.json version
+        run: |
+          # Update server.json version to match the release tag (only for releases)
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            python3 -c "
+            import json
+            with open('server.json', 'r') as f:
+                data = json.load(f)
+            data['version'] = '$RELEASE_VERSION'
+            if 'packages' in data and data['packages']:
+                data['packages'][0]['version'] = '$RELEASE_VERSION'
+            with open('server.json', 'w') as f:
+                json.dump(data, f, indent=2)
+            "
+            echo "Updated server.json version to $RELEASE_VERSION"
+          else
+            echo "Manual dispatch - keeping version $RELEASE_VERSION"
+          fi
+
+      - name: Install MCP Publisher CLI
+        run: |
+          # Download the latest mcp-publisher binary
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+          chmod +x mcp-publisher
+
+      - name: Validate server.json against MCP schema
+        run: |
+          # Use mcp-publisher's built-in validation (includes schema check)
+          echo "Running mcp-publisher validate (includes schema check)..."
+          ./mcp-publisher validate
+          echo "MCP schema validation successful."
+
+      - name: Publish server to Registry
+        run: |
+          # Login using GitHub OIDC (no secrets required)
+          echo "Authenticating with MCP Registry..."
+          ./mcp-publisher login github-oidc
+          
+          # Publish the server
+          echo "Publishing server..."
+          ./mcp-publisher publish
+          echo "Successfully published io.github.jfrog/jfrog-mcp-server v$RELEASE_VERSION"
+
+      - name: Verify publication
+        run: |
+          echo "Waiting for registry to update..."
+          sleep 30
+          echo "Verifying publication in MCP registry..."
+          if curl -s "https://registry.modelcontextprotocol.io/v0/servers?search=io.github.jfrog/jfrog-mcp-server" | grep -q "jfrog-mcp-server"; then
+            echo "✅ Server successfully published and visible in registry"
+          else
+            echo "⚠️  Server may not be visible in registry yet (could take some time)"
+          fi
