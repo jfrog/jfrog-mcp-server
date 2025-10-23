@@ -39,16 +39,7 @@ jobs:
         run: |
           # Update server.json version to match the release tag (only for releases)
           if [[ "${{ github.event_name }}" == "release" ]]; then
-            python3 -c "
-            import json
-            with open('server.json', 'r') as f:
-                data = json.load(f)
-            data['version'] = '$RELEASE_VERSION'
-            if 'packages' in data and data['packages']:
-                data['packages'][0]['version'] = '$RELEASE_VERSION'
-            with open('server.json', 'w') as f:
-                json.dump(data, f, indent=2)
-            "
+            python3 -c "import json; data=json.load(open('server.json')); data['version']='$RELEASE_VERSION'; data['packages'][0]['version']='$RELEASE_VERSION' if 'packages' in data and data['packages'] else None; json.dump(data, open('server.json','w'), indent=2)"
             echo "Updated server.json version to $RELEASE_VERSION"
           else
             echo "Manual dispatch - keeping version $RELEASE_VERSION"
