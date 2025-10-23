@@ -36,8 +36,8 @@ jobs:
           # Update server.json version to match the release tag
           # NOTE: Requires jq tool for JSON manipulation.
           sudo apt-get install -y jq
-          jq --arg ver "$VERSION" '.version = $ver' server.json | tee server.json
-          jq --arg ver "$VERSION" '.packages[0].version = $ver' server.json | tee server.json
+          jq --arg ver "$VERSION" '.version = $ver | .packages[0].version = $ver' server.json > server.json.tmp
+          mv server.json.tmp server.json
           
           echo "Updated server.json version to $VERSION"
 
