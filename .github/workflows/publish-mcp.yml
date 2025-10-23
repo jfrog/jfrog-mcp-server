@@ -28,18 +28,22 @@ jobs:
             VERSION_TAG="${{ github.event.release.tag_name }}"
             VERSION="${VERSION_TAG#v}"
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            # For manual runs, use a placeholder or prompt the user if needed.
-            echo "::error::Manual dispatch not yet configured to set version."
-            exit 1
+            # For manual runs, use the current version from server.json
+            sudo apt-get install -y jq
+            VERSION=$(jq -r '.version' server.json)
+            echo "Using existing version from server.json: $VERSION"
           fi
           
-          # Update server.json version to match the release tag
-          # NOTE: Requires jq tool for JSON manipulation.
-          sudo apt-get install -y jq
-          jq --arg ver "$VERSION" '.version = $ver | .packages[0].version = $ver' server.json > server.json.tmp
-          mv server.json.tmp server.json
-          
-          echo "Updated server.json version to $VERSION"
+          # Update server.json version to match the release tag (only needed for releases)
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            # NOTE: Requires jq tool for JSON manipulation.
+            sudo apt-get install -y jq
+            jq --arg ver "$VERSION" '.version = $ver | .packages[0].version = $ver' server.json > server.json.tmp
+            mv server.json.tmp server.json
+            echo "Updated server.json version to $VERSION"
+          else
+            echo "Using server.json as-is for manual testing"
+          fi
 
       - name: Install MCP Publisher CLI
         run: |
