@@ -19,12 +19,6 @@
       }
     }
   ],
-  "capabilities": [
-    "Resource Management: Create and view projects, repositories, and other JFrog components",
-    "Artifact Search: Execute powerful AQL queries to search for artifacts used within your organization",
-    "Catalog and Curation: Access package information, versions, vulnerabilities, and check curation status",
-    "Security Monitoring: Generate real-time DevSecOps reports on critical CVEs, severity and applicability of vulnerabilities"
-  ],
   "tags": [
     "jfrog",
     "artifactory",
