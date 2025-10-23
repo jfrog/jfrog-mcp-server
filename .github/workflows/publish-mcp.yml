@@ -27,23 +27,19 @@ jobs:
           if [[ "${{ github.event_name }}" == "release" ]]; then
             VERSION_TAG="${{ github.event.release.tag_name }}"
             VERSION="${VERSION_TAG#v}"
-            echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            # For manual runs, use current version from server.json
-            VERSION=$(python3 -c "import json; print(json.load(open('server.json'))['version'])")
-            echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-            echo "Using current server.json version: $VERSION"
+            # For manual runs, use a placeholder or prompt the user if needed.
+            echo "::error::Manual dispatch not yet configured to set version."
+            exit 1
           fi
-
-      - name: Update server.json version
-        run: |
-          # Update server.json version to match the release tag (only for releases)
-          if [[ "${{ github.event_name }}" == "release" ]]; then
-            python3 -c "import json; data=json.load(open('server.json')); data['version']='$RELEASE_VERSION'; data['packages'][0]['version']='$RELEASE_VERSION' if 'packages' in data and data['packages'] else None; json.dump(data, open('server.json','w'), indent=2)"
-            echo "Updated server.json version to $RELEASE_VERSION"
-          else
-            echo "Manual dispatch - keeping version $RELEASE_VERSION"
-          fi
+          
+          # Update server.json version to match the release tag
+          # NOTE: Requires jq tool for JSON manipulation.
+          sudo apt-get install -y jq
+          jq --arg ver "$VERSION" '.version = $ver' server.json | tee server.json
+          jq --arg ver "$VERSION" '.packages[0].version = $ver' server.json | tee server.json
+          
+          echo "Updated server.json version to $VERSION"
 
       - name: Install MCP Publisher CLI
         run: |
@@ -66,7 +62,7 @@ jobs:
           # Publish the server
           echo "Publishing server..."
           mcp-publisher publish
-          echo "Successfully published io.github.jfrog/jfrog-mcp-server v$RELEASE_VERSION"
+          echo "Successfully published io.github.jfrog/jfrog-mcp-server v$VERSION"
 
       - name: Verify publication
         run: |
