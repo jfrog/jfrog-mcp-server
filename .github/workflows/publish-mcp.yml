@@ -56,26 +56,25 @@ jobs:
 
       - name: Install MCP Publisher CLI
         run: |
-          # Download the latest mcp-publisher binary
-          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
-          chmod +x mcp-publisher
+          # Install using Homebrew for simplicity
+          brew install mcp-publisher
 
       - name: Validate server.json against MCP schema
         run: |
           # Use mcp-publisher's built-in validation (includes schema check)
           echo "Running mcp-publisher validate (includes schema check)..."
-          ./mcp-publisher validate
+          mcp-publisher validate
           echo "MCP schema validation successful."
 
       - name: Publish server to Registry
         run: |
           # Login using GitHub OIDC (no secrets required)
           echo "Authenticating with MCP Registry..."
-          ./mcp-publisher login github-oidc
+          mcp-publisher login github-oidc
           
           # Publish the server
           echo "Publishing server..."
-          ./mcp-publisher publish
+          mcp-publisher publish
           echo "Successfully published io.github.jfrog/jfrog-mcp-server v$RELEASE_VERSION"
 
       - name: Verify publication
