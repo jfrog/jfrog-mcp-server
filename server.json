@@ -12,7 +12,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://{JFROG_PLATFORM_URL}/mcp"
+      "url": "https://mycompanyname.com/mcp"
     }
   ],
   "tags": [
