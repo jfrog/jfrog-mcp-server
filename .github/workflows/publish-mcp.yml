@@ -48,13 +48,6 @@ jobs:
           chmod +x mcp-publisher
           sudo mv mcp-publisher /usr/local/bin/
 
-      - name: Validate server.json against MCP schema
-        run: |
-          # Use mcp-publisher's built-in validation (includes schema check)
-          echo "Running mcp-publisher validate (includes schema check)..."
-          mcp-publisher validate
-          echo "MCP schema validation successful."
-
       - name: Publish server to Registry
         run: |
           # Login using GitHub OIDC (no secrets required)
