@@ -1,9 +1,9 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
-  "name": "io.github.jfrog/jfrog-mcp-server",
+  "name": "io.jfrog/jfrog-mcp-server",
   "title": "JFrog Remote MCP Server",
   "description": "MCP Server for JFrog, providing tools for development and artifact management.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "repository": {
     "url": "https://github.com/jfrog/jfrog-mcp-server",
     "source": "github"
@@ -11,7 +11,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://myPlatform.jfrog.github.io/mcp"
+      "url": "https://{myPlatform}.jfrog.io/mcp"
     }
   ],
   "tags": [
@@ -29,6 +29,5 @@
     "url": "https://jfrog.com"
   },
   "homepage": "https://github.com/jfrog/jfrog-mcp-server",
-  "documentation": "https://jfrog.com/help/r/jfrog-integrations-documentation/enable-the-jfrog-mcp-server",
-  "license": "Apache-2.0"
-}
+  "documentation": "https://jfrog.com/help/r/jfrog-integrations-documentation/enable-the-jfrog-mcp-server"
+  }
