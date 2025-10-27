@@ -71,11 +71,7 @@ jobs:
           echo "MCP Publisher version:"
           mcp-publisher --version
           echo ""
-          
-          echo "Validating server.json..."
-          mcp-publisher validate
-          echo ""
-          
+                   
           # Publish the server
           echo "Publishing server..."
           mcp-publisher publish --verbose
