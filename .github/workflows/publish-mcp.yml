@@ -34,16 +34,16 @@ jobs:
             echo "Using existing version from server.json: $VERSION"
           fi
           
-          # Update server.json version to match the release tag (only needed for releases)
-          if [[ "${{ github.event_name }}" == "release" ]]; then
-            # NOTE: Requires jq tool for JSON manipulation.
-            sudo apt-get install -y jq
-            jq --arg ver "$VERSION" '.version = $ver' server.json > server.json.tmp
-            mv server.json.tmp server.json
-            echo "Updated server.json version to $VERSION"
-          else
-            echo "Using server.json as-is for manual testing"
-          fi
+          # # Update server.json version to match the release tag (only needed for releases)
+          # if [[ "${{ github.event_name }}" == "release" ]]; then
+          #   # NOTE: Requires jq tool for JSON manipulation.
+          #   sudo apt-get install -y jq
+          #   jq --arg ver "$VERSION" '.version = $ver' server.json > server.json.tmp
+          #   mv server.json.tmp server.json
+          #   echo "Updated server.json version to $VERSION"
+          # else
+          #   echo "Using server.json as-is for manual testing"
+          # fi
 
       - name: Install MCP Publisher CLI
         run: |
