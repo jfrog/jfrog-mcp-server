@@ -3,7 +3,7 @@
   "name": "io.jfrog/jfrog-mcp-server",
   "title": "JFrog Remote MCP Server",
   "description": "MCP Server for JFrog, providing tools for development and artifact management.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "repository": {
     "url": "https://github.com/jfrog/jfrog-mcp-server",
     "source": "github"
