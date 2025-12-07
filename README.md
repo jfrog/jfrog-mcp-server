@@ -1,3 +1,4 @@
+
 ![MCP Client](https://avatars.githubusercontent.com/u/499942?s=200&v=4) 
 
 # JFrog Remote MCP Server
@@ -50,5 +51,5 @@ The following example shows MCP Server definition in Cursor:
       "url":"https://<​​JFROG_PLATFORM_URL​​>/mcp"
     }  
   }  
-}
+}2332
 ```
