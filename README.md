@@ -52,3 +52,17 @@ The following example shows MCP Server definition in Cursor:
   }  
 }
 ```
+
+The following example shows MCP Server definition in GitHub Copilot CLI (`~/.copilot/mcp-config.json`):  
+```json  
+{  
+  "mcpServers": {  
+    "jfrog": {  
+      "type": "http",
+      "url":"https://<​​JFROG_PLATFORM_URL​​>/mcp"
+    }  
+  }  
+}
+```
+
+For more information, see the [GitHub Copilot CLI documentation](https://docs.github.com/en/copilot/concepts/agents/about-copilot-cli).
