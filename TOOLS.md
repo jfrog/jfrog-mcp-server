@@ -25,18 +25,18 @@ grouped by product and domain.
 | [Security](#security)                                     | Catalog vulnerabilities and Xray artifact summaries                       |
 | [Curation](#curation)                                     | Package compliance, audit events, and waiver requests                    |
 | [Distribution](#distribution)                             | Release bundle distribution, tracking, signing keys, and edge management |
+| [Workers](#workers)                                       | JFrog Workers listing, creation, update, retrieval, and execution history |
+| [Event](#event)                                           | Webhook domain catalog and subscription management                        |
 | [Evidence: Config](#evidence-config)                      | Evidence service configuration and category administration                |
 | [Evidence: Categories](#evidence-categories)              | Evidence category discovery                                               |
 | [Evidence: Records](#evidence-records)                    | Evidence record search, retrieval, creation, and rendering                |
 | [JFrog AppTrust](#jfrog-apptrust)                         | Application lifecycle, versioning, promotion, and release management      |
-| [Workers](#workers)                                       | JFrog Workers listing, creation, retrieval, and execution history         |
 
 ---
 
-## Access: Tokens
-
+<a id="access-tokens" name="access-tokens"></a>
 <details>
-<summary>Tokens Tools</summary>
+<summary><b>Access: Tokens</b></summary>
 
 ### `access_tokens_create`
 
@@ -81,10 +81,9 @@ Revoke an existing access token.
 
 </details>
 
-## Access: OIDC
-
+<a id="access-oidc" name="access-oidc"></a>
 <details>
-<summary>OIDC Tools</summary>
+<summary><b>Access: OIDC</b></summary>
 
 ### `access_oidc_create_configuration`
 
@@ -104,10 +103,9 @@ Create a new OIDC identity provider configuration.
 
 </details>
 
-## Access: Projects
-
+<a id="access-projects" name="access-projects"></a>
 <details>
-<summary>Projects Tools</summary>
+<summary><b>Access: Projects</b></summary>
 
 ### `access_projects_create`
 
@@ -247,12 +245,13 @@ List all JFrog projects.
 
 </details>
 
-## Access: Roles
-
+<a id="access-roles" name="access-roles"></a>
 <details>
-<summary>Roles Tools</summary>
+<summary><b>Access: Roles</b></summary>
 
 ### `access_roles_create_global_role`
+
+*Available from Access - 7.77.*
 
 Create a custom global role with platform-wide permissions.
 
@@ -266,6 +265,8 @@ Create a custom global role with platform-wide permissions.
 
 ### `access_roles_update_global_role`
 
+*Available from Access - 7.77.*
+
 Update an existing custom global role.
 
 **Parameters**:
@@ -277,10 +278,9 @@ Update an existing custom global role.
 
 </details>
 
-## Access: Stages
-
+<a id="access-stages" name="access-stages"></a>
 <details>
-<summary>Stages Tools</summary>
+<summary><b>Access: Stages</b></summary>
 
 ### `access_stages_list_global_stages`
 
@@ -298,10 +298,9 @@ List all global stages configured in the platform.
 
 </details>
 
-## Access: Users and Groups
-
+<a id="access-users-and-groups" name="access-users-and-groups"></a>
 <details>
-<summary>Users and Groups Tools</summary>
+<summary><b>Access: Users and Groups</b></summary>
 
 ### `access_users_list`
 
@@ -346,10 +345,9 @@ Get details of a specific group by name.
 
 </details>
 
-## Artifactory: Repositories
-
+<a id="artifactory-repositories" name="artifactory-repositories"></a>
 <details>
-<summary>Repositories Tools</summary>
+<summary><b>Artifactory: Repositories</b></summary>
 
 ### `artifactory_repositories_create`
 
@@ -419,10 +417,9 @@ Update the configuration of an existing Artifactory repository.
 
 </details>
 
-## Artifactory: Packages
-
+<a id="artifactory-packages" name="artifactory-packages"></a>
 <details>
-<summary>Packages Tools</summary>
+<summary><b>Artifactory: Packages</b></summary>
 
 ### `artifactory_packages_get_versions`
 
@@ -471,10 +468,9 @@ Get native client commands for installing a specific package version.
 
 </details>
 
-## Artifactory: Builds
-
+<a id="artifactory-builds" name="artifactory-builds"></a>
 <details>
-<summary>Builds Tools</summary>
+<summary><b>Artifactory: Builds</b></summary>
 
 ### `artifactory_builds_list_builds`
 
@@ -512,10 +508,9 @@ Get the full build info for a specific build run. Returns build metadata, module
 
 </details>
 
-## Artifactory: Federation
-
+<a id="artifactory-federation" name="artifactory-federation"></a>
 <details>
-<summary>Federation Tools</summary>
+<summary><b>Artifactory: Federation</b></summary>
 
 ### `artifactory_federation_get_status`
 
@@ -543,10 +538,9 @@ Synchronize federated repository configuration to members.
 
 </details>
 
-## Artifactory: Storage
-
+<a id="artifactory-storage" name="artifactory-storage"></a>
 <details>
-<summary>Storage Tools</summary>
+<summary><b>Artifactory: Storage</b></summary>
 
 ### `artifactory_storage_artifact_info`
 
@@ -571,10 +565,9 @@ Retrieve storage information about a file or folder in an Artifactory repository
 
 </details>
 
-## Security
-
+<a id="security" name="security"></a>
 <details>
-<summary>Security Tools</summary>
+<summary><b>Security</b></summary>
 
 ### `xray_artifact_get_summary`
 
@@ -598,17 +591,6 @@ Get Xray policy violation counts for one artifact across one or more versions.
 * `repository_type`: Repository package type, e.g. `Maven`, `Docker`, `npm`, or `Generic` (string, optional)
 * `include_summary`: Include violation count summaries by category and severity (boolean, optional)
 * `new_severities`: Use Critical/High/Medium/Low/Unknown severity names (boolean, optional)
-
-### `xray_artifact_security_status`
-
-*Available from Xray - 3.147.2.*
-
-Get the Xray indexing and download-block status of a single artifact, including whether Xray has finished processing it and a link to the Xray UI.
-
-**Parameters**:
-
-* `repo`: Artifactory repository key that hosts the artifact (string, required)
-* `path`: Artifact path within the repository (string, required)
 
 ### `xray_sbom_search_impacted_resources`
 
@@ -675,10 +657,9 @@ Get public information about a software package.
 
 </details>
 
-## Curation
-
+<a id="curation" name="curation"></a>
 <details>
-<summary>Curation Tools</summary>
+<summary><b>Curation</b></summary>
 
 ### `jfs_curation_check_remote_package_compliance`
 
@@ -753,12 +734,13 @@ Search and check the status of Curation waiver requests.
 
 </details>
 
-## Distribution
-
+<a id="distribution" name="distribution"></a>
 <details>
-<summary>Distribution Tools</summary>
+<summary><b>Distribution</b></summary>
 
 ### `distribution_release_bundles_distribute`
+
+*Available from Distribution - 2.37.*
 
 Start a Release Bundle v2 (RBv2) distribution to one or more edge nodes.
 
@@ -777,6 +759,8 @@ Start a Release Bundle v2 (RBv2) distribution to one or more edge nodes.
 
 ### `distribution_release_bundles_abort`
 
+*Available from Distribution - 2.19.*
+
 Abort an in-progress distribution. Does not roll back already-transferred files.
 
 **Parameters**:
@@ -787,6 +771,8 @@ Abort an in-progress distribution. Does not roll back already-transferred files.
 * `repository_key`: Override of the storing repository (string, optional)
 
 ### `distribution_release_bundles_get_path_mapping`
+
+*Available from Distribution - 2.20.*
 
 Get the applied path mapping and ATW flag for a release bundle version.
 
@@ -800,6 +786,8 @@ Get the applied path mapping and ATW flag for a release bundle version.
 
 ### `distribution_trackers_list`
 
+*Available from Distribution - 2.19.*
+
 List distribution trackers (history) for a release bundle version.
 
 **Parameters**:
@@ -811,6 +799,8 @@ List distribution trackers (history) for a release bundle version.
 
 ### `distribution_trackers_get_by_id`
 
+*Available from Distribution - 2.19.*
+
 Get per-edge progress for a specific distribution tracker.
 
 **Parameters**:
@@ -820,6 +810,8 @@ Get per-edge progress for a specific distribution tracker.
 * `tracker_id`: Long numeric tracker ID from the distribute response (string, required)
 
 ### `distribution_signing_keys_get_for_bundle`
+
+*Available from Distribution - 2.23.*
 
 Get signing keys associated with a release bundle version.
 
@@ -832,6 +824,8 @@ Get signing keys associated with a release bundle version.
 
 ### `distribution_signing_keys_get_public`
 
+*Available from Distribution - 2.19.*
+
 Retrieve the public part of a Distribution signing key as PEM.
 
 **Parameters**:
@@ -840,6 +834,8 @@ Retrieve the public part of a Distribution signing key as PEM.
 
 ### `distribution_signing_keys_propagate`
 
+*Available from Distribution - 2.19.*
+
 Push a public signing key to every edge node.
 
 **Parameters**:
@@ -847,6 +843,8 @@ Push a public signing key to every edge node.
 * `key_name`: Signing key alias (string, required)
 
 ### `distribution_edges_list_for_bundle`
+
+*Available from Distribution - 2.26.*
 
 List edge nodes eligible for a release bundle distribution or deletion.
 
@@ -860,10 +858,177 @@ List edge nodes eligible for a release bundle distribution or deletion.
 
 </details>
 
-## Evidence: Config
-
+<a id="workers" name="workers"></a>
 <details>
-<summary>Evidence Config Tools</summary>
+<summary><b>Workers</b></summary>
+
+### `worker_list_all`
+
+*Available from Workers - 1.0.*
+
+List JFrog Workers on the platform.
+
+**Parameters**:
+
+* `project_key`: Project key to list workers for (string, optional)
+* `keys_only`: Return only worker keys (boolean, optional)
+
+### `worker_get_specific`
+
+*Available from Workers - 1.0.*
+
+Retrieve the full details of a single JFrog Worker by key.
+
+**Parameters**:
+
+* `worker_key`: Worker key to retrieve (string, required)
+
+### `worker_list_actions`
+
+*Available from Workers - 1.0.*
+
+List JFrog Worker trigger actions.
+
+**Parameters**:
+
+* `project_key`: Project key to scope actions (string, optional)
+
+### `worker_get_instructions_for_code_generation`
+
+Return a code template, type definitions, PlatformContext typings, and best-practice instructions for implementing JFrog Worker code.
+
+**Parameters**:
+
+* `action`: Worker action name from `worker_list_actions` (string, required)
+* `intended_purpose`: Short description of what the worker should do (string, required)
+
+### `worker_create`
+
+*Available from Workers - 1.0.*
+
+Create a new JFrog Worker. The worker is created disabled.
+
+**Parameters**:
+
+* `name`: Worker key (string, required)
+* `action_name`: Trigger action name from `worker_list_actions` (string, required)
+* `action_application`: Application paired with the action (string, required)
+* `worker_code`: Full TS/JS worker source; prefix with `base64:` if encoded (string, required)
+* `project_key`: Access project key (string, optional)
+* `description`: Human-readable description (string, optional)
+* `filter_criteria`: Action-specific filter criteria object (object, optional)
+* `secrets`: Worker secrets as key/value objects (object\[], optional)
+* `properties`: Worker properties as key/value objects (object\[], optional)
+* `shared`: Allow non-admin execution where permitted (boolean, optional)
+* `debug`: Record successful executions for visibility (boolean, optional)
+
+### `worker_update`
+
+*Available from Workers - 1.0.*
+
+Update an existing JFrog Worker. Prefer loading the current state with `worker_get_specific` first.
+
+**Parameters**:
+
+* `name`: Worker key (string, required)
+* `action_name`: Trigger action name from `worker_list_actions` (string, required)
+* `action_application`: Application paired with the action (string, required)
+* `worker_code`: Full TS/JS worker source; prefix with `base64:` if encoded (string, required)
+* `enabled`: Whether the worker is enabled (boolean, optional)
+* `project_key`: Access project key (string, optional)
+* `description`: Human-readable description (string, optional)
+* `filter_criteria`: Action-specific filter criteria object (object, optional)
+* `secrets`: Worker secrets as key/value objects (object\[], optional)
+* `properties`: Worker properties as key/value objects (object\[], optional)
+* `shared`: Allow non-admin execution where permitted (boolean, optional)
+* `debug`: Record successful executions for visibility (boolean, optional)
+
+### `worker_get_execution_history`
+
+*Available from Workers - 1.0.*
+
+Retrieve execution history for JFrog Workers.
+
+**Parameters**:
+
+* `worker_key`: Filter to a specific worker key (string, optional)
+* `project_key`: Filter to workers in a project (string, optional)
+* `show_test_run`: Include test runs (boolean, optional)
+* `max_items`: Maximum history entries to return (integer, optional)
+* `start`: Exclude executions before this epoch ms timestamp (integer, optional)
+* `end`: Exclude executions after this epoch ms timestamp (integer, optional)
+
+</details>
+
+<a id="event" name="event"></a>
+<details>
+<summary><b>Event</b></summary>
+
+### `event_domains_list`
+
+List the webhook domain and event type catalog on the JFrog Event service.
+
+**Parameters**:
+
+* `project_key`: Project key for auth context only; does not filter the catalog (string, optional)
+
+### `event_subscriptions_list`
+
+List webhook subscriptions the caller can read.
+
+**Parameters**:
+
+* `project_key`: Project key to scope results (string, optional)
+* `domain`: Filter by event domain ids from `event_domains_list` (string\[], optional)
+
+### `event_subscriptions_get`
+
+Get one webhook subscription by key.
+
+**Parameters**:
+
+* `subscription_key`: Subscription key to retrieve (string, required)
+* `project_key`: Project key for project-scoped subscriptions (string, optional)
+
+### `event_subscriptions_create`
+
+Create a new webhook subscription. Prefer verifying domain and event types with `event_domains_list` first.
+
+**Parameters**:
+
+* `subscription_key`: Subscription key for the new webhook (string, required)
+* `domain`: Event domain id from `event_domains_list` (string, required)
+* `event_types`: Event type ids from `event_domains_list` (string\[], required)
+* `handlers`: Handler config array with exactly one entry (object\[], required)
+* `enabled`: Whether the subscription is active on create; default false (boolean, optional)
+* `filter_criteria`: Event filter criteria object (object, optional)
+* `description`: Human-readable description (string, optional)
+* `project_key`: Project scope when all chosen event types support projects (string, optional)
+* `debug`: Record webhook execution details (boolean, optional)
+* `force`: Skip handler URL verification only (boolean, optional)
+
+### `event_subscriptions_update`
+
+Update an existing webhook subscription (full replace). Prefer loading the current config with `event_subscriptions_get` first.
+
+**Parameters**:
+
+* `subscription_key`: Subscription key to update (string, required)
+* `enabled`: Whether the subscription is active (boolean, required)
+* `domain`: Event domain id (string, required)
+* `event_types`: Event type ids (string\[], required)
+* `handlers`: Full handler array (object\[], required)
+* `filter_criteria`: Event filter criteria object (object, optional)
+* `description`: Human-readable description (string, optional)
+* `project_key`: Project scope; immutable on update (string, optional)
+* `debug`: Record webhook execution details (boolean, optional)
+* `force`: Skip handler URL verification only (boolean, optional)
+
+</details>
+
+<a id="evidence-config" name="evidence-config"></a>
+<details>
+<summary><b>Evidence: Config</b></summary>
 
 ### `evidence_config_get`
 
@@ -897,10 +1062,9 @@ Replace the Evidence categories configuration.
 
 </details>
 
-## Evidence: Categories
-
+<a id="evidence-categories" name="evidence-categories"></a>
 <details>
-<summary>Evidence Categories Tools</summary>
+<summary><b>Evidence: Categories</b></summary>
 
 ### `evidence_categories_list`
 
@@ -924,10 +1088,9 @@ Retrieve all predicate type URIs that belong to a specific Evidence category.
 
 </details>
 
-## Evidence: Records
-
+<a id="evidence-records" name="evidence-records"></a>
 <details>
-<summary>Evidence Records Tools</summary>
+<summary><b>Evidence: Records</b></summary>
 
 ### `evidence_records_search`
 
@@ -1024,10 +1187,9 @@ Upload an already-signed DSSE envelope as evidence and attach it to a JFrog subj
 
 </details>
 
-## JFrog AppTrust
-
+<a id="jfrog-apptrust" name="jfrog-apptrust"></a>
 <details>
-<summary>JFrog AppTrust Tools</summary>
+<summary><b>JFrog AppTrust</b></summary>
 
 ### `apptrust_create_application`
 
@@ -1189,87 +1351,5 @@ Get activity log events from JFrog AppTrust.
 * `offset`: Pagination offset (integer, optional)
 * `sort_by`: Sort field (string, optional)
 * `order`: Sort order — `asc` or `desc` (string, optional)
-
-</details>
-
-## Workers
-
-<details>
-<summary>Workers Tools</summary>
-
-### `worker_list_all`
-
-*Available from Workers - 1.0.*
-
-List JFrog Workers on the platform.
-
-**Parameters**:
-
-* `project_key`: Project key to list workers for (string, optional)
-* `keys_only`: Return only worker keys (boolean, optional)
-
-### `worker_get_specific`
-
-*Available from Workers - 1.0.*
-
-Retrieve the full details of a single JFrog Worker by key.
-
-**Parameters**:
-
-* `worker_key`: Worker key to retrieve (string, required)
-
-### `worker_list_actions`
-
-*Available from Workers - 1.0.*
-
-List JFrog Worker trigger actions.
-
-**Parameters**:
-
-* `project_key`: Project key to scope actions (string, optional)
-
-### `worker_get_instructions_for_code_generation`
-
-Return a code template, type definitions, PlatformContext typings, and best-practice instructions for implementing JFrog Worker code.
-
-**Parameters**:
-
-* `action`: Worker action name from `worker_list_actions` (string, required)
-* `intended_purpose`: Short description of what the worker should do (string, required)
-
-### `worker_create`
-
-*Available from Workers - 1.0.*
-
-Create a new JFrog Worker. The worker is created disabled.
-
-**Parameters**:
-
-* `name`: Worker key (string, required)
-* `action_name`: Trigger action name from `worker_list_actions` (string, required)
-* `action_application`: Application paired with the action (string, required)
-* `worker_code`: Full TS/JS worker source; prefix with `base64:` if encoded (string, required)
-* `project_key`: Access project key (string, optional)
-* `description`: Human-readable description (string, optional)
-* `filter_criteria`: Action-specific filter criteria object (object, optional)
-* `secrets`: Worker secrets as key/value objects (object\[], optional)
-* `properties`: Worker properties as key/value objects (object\[], optional)
-* `shared`: Allow non-admin execution where permitted (boolean, optional)
-* `debug`: Record successful executions for visibility (boolean, optional)
-
-### `worker_get_execution_history`
-
-*Available from Workers - 1.0.*
-
-Retrieve execution history for JFrog Workers.
-
-**Parameters**:
-
-* `worker_key`: Filter to a specific worker key (string, optional)
-* `project_key`: Filter to workers in a project (string, optional)
-* `show_test_run`: Include test runs (boolean, optional)
-* `max_items`: Maximum history entries to return (integer, optional)
-* `start`: Exclude executions before this epoch ms timestamp (integer, optional)
-* `end`: Exclude executions after this epoch ms timestamp (integer, optional)
 
 </details>
