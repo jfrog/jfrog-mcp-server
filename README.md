@@ -21,7 +21,7 @@ Among the capabilities you can access with direct, friendly AI interactions:
 
 **And much more.** See the full [tool reference](TOOLS.md) for everything the server exposes.
 
-> **Note:** JFrog MCP Server is currently in Beta.
+> **Note:** The JFrog MCP Server is now **generally available (GA)** on JFrog Cloud (SaaS). The self-managed server is in Beta. Individual tools marked **Beta** in the [tool reference](TOOLS.md) are experimental and must be enabled for your environment.
 
 ## Remote Server Implementation
 
@@ -33,7 +33,7 @@ You connect to the JFrog MCP Server using OAuth for authentication. This elimina
 
 ## Set up the JFrog MCP Server
 
-The JFrog Remote MCP Server is available to JFrog users with a Cloud (SaaS) subscription.
+The JFrog Remote MCP Server is generally available (GA) to JFrog users with a Cloud (SaaS) subscription.
 
 > **Subscription information:** Supported on the **Cloud (SaaS)** and **Self-Managed** platforms for all licenses.
 
@@ -77,7 +77,7 @@ For more MCP clients (Kiro, Claude, Codex, and others), see [Add the JFrog MCP S
 
 ## Tools
 
-The server exposes tools across Access, Artifactory, Distribution, Evidence, Security, Curation, AppTrust, and Workers.
+The server exposes over 100 tools across Access, Artifactory, Security, Curation, Distribution, Grid, Workers, OneModel, Event, Evidence, and AppTrust.
 
 See the full reference in [`TOOLS.md`](TOOLS.md).
 

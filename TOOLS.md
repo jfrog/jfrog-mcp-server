@@ -7,6 +7,8 @@ grouped by product and domain.
 > is updated server-side, so you automatically get new tools and improvements as
 > they are released — no client upgrade required.
 
+Tools offered as Beta capabilities are labeled **Beta**. Beta tools are experimental and require Beta tools to be enabled for your environment.
+
 ## Available Toolsets
 
 | Toolset                                                   | Description                                                               |
@@ -25,8 +27,10 @@ grouped by product and domain.
 | [Security](#security)                                     | Catalog vulnerabilities and Xray artifact summaries                       |
 | [Curation](#curation)                                     | Package compliance, audit events, and waiver requests                    |
 | [Distribution](#distribution)                             | Release bundle distribution, tracking, signing keys, and edge management |
+| [Grid](#grid)                                             | Grid topology, JPD inventory, and entity sync monitoring                  |
 | [Workers](#workers)                                       | JFrog Workers listing, creation, update, retrieval, and execution history |
-| [Event](#event)                                           | Webhook domain catalog and subscription management                        |
+| [OneModel](#onemodel)                                     | Build and execute GraphQL queries against the JFrog OneModel unified data endpoint          |
+| [Event](#event)                                           | Webhook domain catalog, subscription management, and troubleshooting      |
 | [Evidence: Config](#evidence-config)                      | Evidence service configuration and category administration                |
 | [Evidence: Categories](#evidence-categories)              | Evidence category discovery                                               |
 | [Evidence: Records](#evidence-records)                    | Evidence record search, retrieval, creation, and rendering                |
@@ -39,6 +43,8 @@ grouped by product and domain.
 <summary><b>Access: Tokens</b></summary>
 
 ### `access_tokens_create`
+
+> **Beta**
 
 *Note: The name of this tool will change in an upcoming release.*
 
@@ -60,6 +66,8 @@ Create a new access token.
 
 ### `access_tokens_list`
 
+> **Beta**
+
 List access tokens with filters.
 
 **Parameters**:
@@ -70,14 +78,6 @@ List access tokens with filters.
 * `refreshable`: Filter by refreshable status (boolean, optional)
 * `order_by`: Sort field — `created`, `expiry`, or `subject` (string, optional)
 * `descending_order`: Sort in descending order (boolean, optional)
-
-### `access_tokens_revoke`
-
-Revoke an existing access token.
-
-**Parameters**:
-
-* `token`: The token value to revoke (JWT or reference token) (string, required)
 
 </details>
 
@@ -592,6 +592,17 @@ Get Xray policy violation counts for one artifact across one or more versions.
 * `include_summary`: Include violation count summaries by category and severity (boolean, optional)
 * `new_severities`: Use Critical/High/Medium/Low/Unknown severity names (boolean, optional)
 
+### `xray_artifact_security_status`
+
+*Available from Xray - 3.147.2.*
+
+Get the Xray indexing and download-block status of a single artifact, including whether Xray has finished processing it and a link to the Xray UI.
+
+**Parameters**:
+
+* `repo`: Artifactory repository key that hosts the artifact (string, required)
+* `path`: Artifact path within the repository (string, required)
+
 ### `xray_sbom_search_impacted_resources`
 
 Search Xray impacted resources by vulnerability, package, package version, or SaaS service.
@@ -732,6 +743,19 @@ Search and check the status of Curation waiver requests.
 * `num_of_rows`: Results per page (integer, optional)
 * `page_num`: Page number, 1-based (integer, optional)
 
+### `jfs_curation_decide_waiver_request`
+
+*Available from Xray - 3.149.0.*
+
+Approve or reject a pending Curation waiver request. Call once per `request_id`; for multiple waivers, invoke repeatedly. Use `jfs_curation_query_waiver_requests` with `status=pending` and `can_approve=true` to list IDs the caller may decide.
+
+**Parameters**:
+
+* `request_id`: Waiver request ID from `jfs_curation_query_waiver_requests` (integer, required)
+* `status`: Decision outcome — `approved` or `rejected` (string, required)
+* `justification`: Approver/rejector rationale; must be non-empty (string, required)
+* `duration_days`: Approval duration in days (1–365); omit for permanent approval when allowed; if Xray requires a duration, the tool stops and asks the approver for one rather than choosing a value; must be omitted when `status=rejected` (integer, optional)
+
 </details>
 
 <a id="distribution" name="distribution"></a>
@@ -858,6 +882,71 @@ List edge nodes eligible for a release bundle distribution or deletion.
 
 </details>
 
+<a id="grid" name="grid"></a>
+<details>
+<summary><b>Grid</b></summary>
+
+### `grid_jpds_list`
+
+List JPDs known to Mission Control for Grid topology membership.
+
+**Parameters**:
+
+* `name`: JPD name filter; supports `*` wildcards (string, optional)
+* `tag`: JPD tag filter; supports `*` wildcards (string, optional)
+* `url`: JPD public URL filter; supports `*` wildcards (string, optional)
+* `status`: JPD status — `ONLINE`, `OFFLINE`, `PARTIAL`, or `UNAUTHORIZED` (string, optional)
+
+### `grid_topology_list`
+
+List all Grid topologies with member sites and connection status.
+
+**Parameters**:
+
+* No parameters required
+
+### `grid_topology_get`
+
+Get one Grid topology by key, including member sites and connection status.
+
+**Parameters**:
+
+* `key`: Grid topology key from `grid_topology_list` or user input (string, required)
+
+### `grid_monitoring_summarize_entities`
+
+Get aggregated entity-sync counts per type for a Grid topology.
+
+**Parameters**:
+
+* `key`: Grid topology key (string, required)
+* `modified_after`: RFC3339 lower bound for entity modification time (string, optional)
+* `modified_before`: RFC3339 upper bound for entity modification time (string, optional)
+* `show_system_entities`: Include project-scoped system entity types (boolean, optional)
+
+### `grid_monitoring_list_entities`
+
+List entity IDs and sync status for one entity type in a Grid topology.
+
+**Parameters**:
+
+* `key`: Grid topology key (string, required)
+* `entity_type`: Entity public key, such as `users`, `groups`, `projects`, or `roles` (string, required)
+* `status`: Sync status filter — `failure`, `success`, or `in_progress` (string, optional)
+* `page_token`: Pagination token from a previous response (string, optional)
+
+### `grid_monitoring_get_entity`
+
+Get per-target sync detail for one entity in a Grid topology, including failure descriptions.
+
+**Parameters**:
+
+* `key`: Grid topology key (string, required)
+* `entity_type`: Entity public key, such as `users` or `projectGroups` (string, required)
+* `entity_id`: Entity business ID from `grid_monitoring_list_entities` (string, required)
+
+</details>
+
 <a id="workers" name="workers"></a>
 <details>
 <summary><b>Workers</b></summary>
@@ -883,6 +972,19 @@ Retrieve the full details of a single JFrog Worker by key.
 
 * `worker_key`: Worker key to retrieve (string, required)
 
+### `worker_execute`
+
+> **Beta**
+
+*Available from Workers - 1.0.*
+
+Execute a `GENERIC_EVENT` JFrog Worker by key.
+
+**Parameters**:
+
+* `worker_key`: Worker key to execute (string, required)
+* `payload`: JSON body sent as the worker input; shape is custom per worker (object, optional)
+
 ### `worker_list_actions`
 
 *Available from Workers - 1.0.*
@@ -901,6 +1003,7 @@ Return a code template, type definitions, PlatformContext typings, and best-prac
 
 * `action`: Worker action name from `worker_list_actions` (string, required)
 * `intended_purpose`: Short description of what the worker should do (string, required)
+* `project_key`: Access project key to scope action lookup (string, optional)
 
 ### `worker_create`
 
@@ -923,6 +1026,8 @@ Create a new JFrog Worker. The worker is created disabled.
 * `debug`: Record successful executions for visibility (boolean, optional)
 
 ### `worker_update`
+
+> **Beta**
 
 *Available from Workers - 1.0.*
 
@@ -957,6 +1062,38 @@ Retrieve execution history for JFrog Workers.
 * `max_items`: Maximum history entries to return (integer, optional)
 * `start`: Exclude executions before this epoch ms timestamp (integer, optional)
 * `end`: Exclude executions after this epoch ms timestamp (integer, optional)
+
+</details>
+
+<a id="onemodel" name="onemodel"></a>
+<details>
+<summary><b>OneModel</b></summary>
+
+### `onemodel_graphql_query_introspect`
+
+> **Beta**
+
+*Available from OneModel - 1.109.0.*
+
+ Describe the data you need to explore the schema and build the relevant GraphQL query.
+
+**Parameters**:
+
+* `entity_name`: Single GraphQL entity name to inspect; mutually exclusive with `entity_names` (string, optional)
+* `entity_names`: GraphQL entity names to retrieve in a single call; mutually exclusive with `entity_name` (string\[], optional)
+
+### `onemodel_graphql_query_execute`
+
+> **Beta**
+
+*Available from OneModel - 1.109.0.*
+
+ Run the GraphQL query to retrieve the requested data from OneModel.
+
+**Parameters**:
+
+* `query`: GraphQL query string (string, required)
+* `variables`: GraphQL variables for parameterized queries (object, optional)
 
 </details>
 
@@ -1009,6 +1146,8 @@ Create a new webhook subscription. Prefer verifying domain and event types with 
 
 ### `event_subscriptions_update`
 
+> **Beta**
+
 Update an existing webhook subscription (full replace). Prefer loading the current config with `event_subscriptions_get` first.
 
 **Parameters**:
@@ -1018,11 +1157,36 @@ Update an existing webhook subscription (full replace). Prefer loading the curre
 * `domain`: Event domain id (string, required)
 * `event_types`: Event type ids (string\[], required)
 * `handlers`: Full handler array (object\[], required)
+* `debug`: Record successful webhook deliveries in troubleshooting; failures are always recorded (boolean, required)
 * `filter_criteria`: Event filter criteria object (object, optional)
 * `description`: Human-readable description (string, optional)
 * `project_key`: Project scope; immutable on update (string, optional)
-* `debug`: Record webhook execution details (boolean, optional)
 * `force`: Skip handler URL verification only (boolean, optional)
+
+### `event_troubleshooting_status`
+
+Check whether webhook delivery recording and the troubleshooting data API are available on the JFrog Event service.
+
+**Parameters**:
+
+* `project_key`: Project key for auth context only; does not change the status payload (string, optional)
+
+### `event_troubleshooting_list`
+
+List the latest webhook delivery attempt per subscription from Event troubleshooting storage.
+
+**Parameters**:
+
+* `project_key`: Project key to scope delivery results (string, optional)
+
+### `event_troubleshooting_count`
+
+Count webhook delivery records and errors since a troubleshooting stream start ID.
+
+**Parameters**:
+
+* `start`: Redis stream start ID as a non-negative integer string, typically epoch milliseconds (string, required)
+* `project_key`: Project key to scope delivery counts (string, optional)
 
 </details>
 
@@ -1051,6 +1215,8 @@ Retrieve the full Evidence category configuration.
 * No parameters required
 
 ### `evidence_config_update_categories`
+
+> **Beta**
 
 *Available from Evidence - 7.277.*
 
@@ -1244,7 +1410,7 @@ Create a new version of a JFrog AppTrust application.
 * `tag`: Version tag (string, optional)
 * `filters`: Include/exclude filters (object, optional)
 * `draft`: Create as draft version (boolean, optional)
-* `async_`: Run creation asynchronously (boolean, optional)
+* `async`: Run creation asynchronously (boolean, optional)
 * `sign_key_name`: Signing key name (string, optional)
 
 ### `apptrust_list_versions`
@@ -1291,8 +1457,10 @@ Promote an application version to a lifecycle stage.
 * `promotion_type`: Promotion type — move, copy, keep, dry\_run (string, optional)
 * `included_repository_keys`: Repositories to include (string\[], optional)
 * `excluded_repository_keys`: Repositories to exclude (string\[], optional)
+* `artifact_additional_properties`: Additional properties to set on promoted artifacts (object\[], optional)
+* `promotion_authorization_type`: Authorization type for the promotion (string, optional)
 * `overwrite_strategy`: Overwrite strategy — DISABLED, LATEST, ALL (string, optional)
-* `async_`: Run promotion asynchronously (boolean, optional)
+* `async`: Run promotion asynchronously (boolean, optional)
 * `sign_key_name`: Signing key name (string, optional)
 
 ### `apptrust_get_version_promotion_history`
@@ -1317,8 +1485,10 @@ Release an application version to the PROD stage.
 * `promotion_type`: Promotion type — move, copy, keep, dry\_run (string, optional)
 * `included_repository_keys`: Repositories to include (string\[], optional)
 * `excluded_repository_keys`: Repositories to exclude (string\[], optional)
+* `artifact_additional_properties`: Additional properties to set on promoted artifacts (object\[], optional)
+* `promotion_authorization_type`: Authorization type for the release promotion (string, optional)
 * `overwrite_strategy`: Overwrite strategy — DISABLED, LATEST, ALL (string, optional)
-* `async_`: Run release asynchronously (boolean, optional)
+* `async`: Run release asynchronously (boolean, optional)
 * `sign_key_name`: Signing key name (string, optional)
 
 ### `apptrust_rollback_version`
@@ -1330,7 +1500,7 @@ Roll back the latest promotion of an application version.
 * `application_key`: Application identifier (string, required)
 * `version`: Version string (string, required)
 * `from_stage`: Stage to roll back from (string, required)
-* `async_`: Run rollback asynchronously (boolean, optional)
+* `async`: Run rollback asynchronously (boolean, optional)
 
 ### `apptrust_get_activity_logs`
 
@@ -1346,6 +1516,7 @@ Get activity log events from JFrog AppTrust.
 * `timestamp_to`: End time in unix milliseconds (integer, optional)
 * `subject_id`: Filter by subject ID (string, optional)
 * `subject_name`: Filter by subject name (string, optional)
+* `prefix`: Prefix filter across event ID, subject type, application key, and project key (string, optional)
 * `created_by`: Filter by creator usernames (string\[], optional)
 * `limit`: Page size (integer, optional)
 * `offset`: Pagination offset (integer, optional)
