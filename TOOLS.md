@@ -25,8 +25,9 @@ Tools offered as Beta capabilities are labeled **Beta**. Beta tools are experime
 | [Artifactory: Federation](#artifactory-federation)        | Federated repository health, conflicts, and configuration synchronization |
 | [Artifactory: Storage](#artifactory-storage)              | Artifact and folder storage metadata, listing, and permissions            |
 | [Security](#security)                                     | Catalog vulnerabilities and Xray artifact summaries                       |
-| [Curation](#curation)                                     | Package compliance, audit events, and waiver requests                    |
+| [Curation](#curation)                                     | Package compliance, audit events (package downloads and Compliant Version Selection), and waiver requests |
 | [Distribution](#distribution)                             | Release bundle distribution, tracking, signing keys, and edge management |
+| [AI Catalog](#ai-catalog)                                  | AI Catalog skills, agent plugins, and MCP server governance               |
 | [Grid](#grid)                                             | Grid topology, JPD inventory, and entity sync monitoring                  |
 | [Workers](#workers)                                       | JFrog Workers listing, creation, update, retrieval, and execution history |
 | [OneModel](#onemodel)                                     | Build and execute GraphQL queries against the JFrog OneModel unified data endpoint          |
@@ -706,6 +707,50 @@ Search blocked Curation package audit events. Covers policy blocks only — not 
 * `direction`: Sort direction — `asc` or `desc` (string, optional)
 * `include_total`: Include `meta.total_count` in the response (boolean, optional)
 
+### `jfs_curation_query_cvs_audit_events`
+
+*Available from Xray - 3.153.0.*
+
+Search JFrog Curation Compliant Version Selection (CVS) audit events — Curation's per-version compliance evaluation records (which versions were approved or blocked, and the policies involved). Answers "why is version X not compliant or not resolvable?", "which versions are compliant?", and "why were other versions not selected?". This is the CVS evaluation audit, not the download-time 403 block audit — use `jfs_curation_query_audit_events` for those.
+
+**Parameters**:
+
+* `package_name`: Exact package name; also narrows the inlined packages per event (string, required)
+* `package_version`: Exact version; narrows inlined versions and drops packages with no match (string, optional)
+* `package_type`: Package ecosystem, exact-match and case-sensitive (string, required)
+* `curated_repo_name`: Curation-enabled repository whose index was built (string, optional)
+* `inspection_results`: Per-package outcome — `all_versions_compliant`, `no_compliant_versions`, or `compliant_version_selected`; comma-separate for an OR/IN list (string, optional)
+* `reason`: Per-version verdict reason — `No policy violations`, `Policy violations`, `Pending Catalog update`, or `Bypass on pending update`; comma-separate for an OR/IN list (string, optional)
+* `event_id`: CVS audit event id from `data[*].id`; use for the phase-2 drill-down (integer, optional)
+* `created_at_start`: Event time lower bound, RFC3339 (string, optional)
+* `created_at_end`: Event time upper bound, RFC3339 (string, optional)
+* `include_versions`: Inline each evaluated version with its action, reason, and blocking policies; default false (boolean, optional)
+* `include_total`: Include `meta.total_count` and make `meta.next_offset` exact (boolean, optional)
+* `num_of_rows`: Page size, 1–2000; default 100; use ≤10 when `include_versions` is true (integer, optional)
+* `offset`: Pagination offset; use `meta.next_offset` from a prior response (integer, optional)
+* `direction`: Sort direction — `asc` or `desc` (string, optional)
+
+### `jfs_curation_get_cvs_audit_version_detail`
+
+*Available from Xray - 3.153.0.*
+
+Get the full policy explanation and remediation for one package version evaluated by CVS. Use after `jfs_curation_query_cvs_audit_events` when the user needs the human-readable reason a version was blocked and how to unblock it.
+
+**Parameters**:
+
+* `version_id`: CVS audit version id from `packages[*].versions[*].id` of a prior listing (integer, required)
+* `created_at`: The parent event's `created_at` in epoch milliseconds, copied verbatim from the listing response — not RFC3339 (integer, required)
+
+### `jfs_curation_get_audit_event_policies`
+
+*Available from Xray - 3.153.0.*
+
+Get the policies, explanation, and remediation behind one download-time Curation block. Use after `jfs_curation_query_audit_events`, which returns policy and condition names only, when the user asks why a package was blocked or how to unblock it.
+
+**Parameters**:
+
+* `event_id`: Curation audit event id from `data[*].id` of a `jfs_curation_query_audit_events` response (integer, required)
+
 ### `jfs_curation_create_waiver_request`
 
 *Available from Xray - 3.148.0.*
@@ -879,6 +924,62 @@ List edge nodes eligible for a release bundle distribution or deletion.
 * `action`: Permission code — `x` (distribute), `d` (delete), `r` (read), `w` (write), `n` (annotate), `m` (manage), `a` (admin) (string, required)
 * `project`: Project key; required for project-scoped bundles (string, optional)
 * `repository_key`: Override of the storing repository (string, optional)
+
+</details>
+
+<a id="ai-catalog" name="ai-catalog"></a>
+<details>
+<summary><b>AI Catalog</b></summary>
+
+### `aicatalog_skills_list`
+
+List skills published in the JFrog AI Catalog.
+
+**Parameters**:
+
+* `project_key`: JFrog project key to scope the search to; omit to search across all skills repositories (string, optional)
+* `name_pattern`: Lowercase substring to match against the skill name (string, optional)
+* `page_size`: Number of skills per page (integer, optional)
+* `cursor`: Pagination cursor from a prior response (string, optional)
+
+### `aicatalog_agent_plugins_list`
+
+List agent plugins published in the JFrog AI Catalog.
+
+**Parameters**:
+
+* `project_key`: JFrog project key to scope the search to; omit to search across all agent-plugin repositories (string, optional)
+* `name_pattern`: Lowercase substring to match against the plugin name (string, optional)
+* `page_size`: Number of plugins per page (integer, optional)
+* `cursor`: Pagination cursor from a prior response (string, optional)
+
+### `aicatalog_mcps_list`
+
+List MCP servers the JFrog AI Catalog has approved for a JFrog project.
+
+**Parameters**:
+
+* `project_key`: JFrog project key (string, required)
+* `page_size`: Number of servers per page (integer, optional)
+* `cursor`: Pagination cursor from a prior response (string, optional)
+
+### `aicatalog_mcps_allow`
+
+Approve an MCP server for use in a JFrog project.
+
+**Parameters**:
+
+* `mcp_server_registry_id`: Opaque MCP server registry ID (string, required)
+* `project_key`: JFrog project key the server is approved for (string, required)
+
+### `aicatalog_mcps_restrict`
+
+Remove an MCP server's approval for a JFrog project.
+
+**Parameters**:
+
+* `mcp_server_registry_id`: Opaque MCP server registry ID (string, required)
+* `project_key`: JFrog project key the server is restricted in (string, required)
 
 </details>
 
