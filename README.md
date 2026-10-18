@@ -77,7 +77,7 @@ For more MCP clients (Kiro, Claude, Codex, and others), see [Add the JFrog MCP S
 
 ## Tools
 
-The server exposes over 100 tools across Access, Artifactory, Security, Curation, Distribution, Grid, Workers, OneModel, Event, Evidence, and AppTrust.
+The server exposes over 100 tools across Access, Artifactory, Security, Curation, Distribution, AI Catalog, Grid, Workers, OneModel, Event, Evidence, and AppTrust.
 
 See the full reference in [`TOOLS.md`](TOOLS.md).
 
